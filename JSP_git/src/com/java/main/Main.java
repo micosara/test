@@ -8,6 +8,9 @@ public class Main {
 		System.out.println("hello");
 		System.out.println("java");
 		System.out.println("good-bye!");
+		System.out.println("JSP");
+		System.out.println("Spring");
+
 	}
 
 }
