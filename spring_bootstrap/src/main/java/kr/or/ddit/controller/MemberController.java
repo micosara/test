@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.or.ddit.command.MemberModifyCommand;
 import kr.or.ddit.command.MemberRegistCommand;
 import kr.or.ddit.command.SearchCriteria;
 import kr.or.ddit.dto.MemberVO;
@@ -183,5 +186,85 @@ public class MemberController {
 
 		return url;
 	}
+	
+	@RequestMapping(value = "/modifyForm", method = RequestMethod.GET)
+	public String modifyForm(String id, Model model)throws SQLException {
 
+		String url = "member/modify";
+
+		MemberVO member = memberService.getMember(id);
+		model.addAttribute("member", member);
+		
+
+		return url;
+	}
+	
+
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String modify(MemberModifyCommand modifyReq,HttpSession session,
+						 RedirectAttributes rttr)throws Exception {
+		String url="redirect:/member/detail.do";
+		
+		MemberVO member = modifyReq.toParseMember();
+
+		// 신규 파일 변경 및 기존 파일 삭제
+		String fileName = savePicture(modifyReq.getOldPicture(), modifyReq.getPicture());
+		member.setPicture(fileName);
+		
+		//파일변경 없을시 기존 파일명 유지
+		if (modifyReq.getPicture().isEmpty()) {
+			member.setPicture(modifyReq.getOldPicture());
+		}
+		//DB 내용 수정
+		memberService.modify(member);
+		
+		rttr.addFlashAttribute("parentReload",false);
+		
+		// 로그인한 사용자의 경우 수정된 정보로 session 업로드
+		MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+		if (loginUser != null && member.getId().equals(loginUser.getId())) {
+			session.setAttribute("loginUser", member);
+			rttr.addFlashAttribute("parentReload",true);
+		}
+		
+		rttr.addAttribute("id",member.getId());
+		rttr.addAttribute("from","modify");
+		
+		rttr.addFlashAttribute("member",memberService.getMember(modifyReq.getId()));
+		
+		return url;
+	}
+	
+	@RequestMapping(value = "/remove", method = RequestMethod.GET)
+	public String remove(String id, HttpSession session, RedirectAttributes rttr) throws SQLException {
+		String url = "redirect:/member/detail.do";
+		
+		MemberVO member;
+
+		// 이미지 파일을 삭제
+		member = memberService.getMember(id);
+		String savePath = this.picturePath;
+		File imageFile = new File(savePath, member.getPicture());
+		if (imageFile.exists()) {
+			imageFile.delete();
+		}
+		//DB삭제
+		memberService.remove(id);
+		
+		// 삭제되는 회원이 로그인 회원인경우 로그아웃 해야함.
+		MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+		if (loginUser.getId().equals(member.getId())) {
+			session.invalidate();
+		}
+		
+		rttr.addFlashAttribute("removeMember",member);
+		
+		rttr.addAttribute("from","remove");		
+		rttr.addAttribute("id",id);
+		
+		return url;
+	}
+	
 }
+
+
