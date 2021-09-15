@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <body>
 
@@ -147,7 +148,15 @@
 	
   
 <script>
-	
+	<c:if test="${from eq 'modify'}" >
+		alert("정상적으로 수정되었습니다.");	
+		window.opener.location.reload();
+	</c:if>
+	<c:if test="${from eq 'remove'}" >
+		alert("삭제되었습니다.");
+		window.opener.location.reload();
+		window.close();
+	</c:if>
 	
 
 	function modify_go(){

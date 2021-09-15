@@ -106,7 +106,7 @@ function modify_go(){
 function remove_go(){
 	//alert("click remove btn");
 	var answer = confirm("정말 삭제하시겠습니까?");
-	if(answer)	formObj.attr({'action':'remove.do'
+	if(answer)	formObj.attr({'action':'remove.do',
 							  'method':'post'}).submit();
 }
 

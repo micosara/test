@@ -91,7 +91,7 @@
 						</tr>
 					</c:if>				
 					<c:forEach items="${noticeList }" var="notice">
-						<tr style='font-size:0.85em;cursor:pointer;' onclick="OpenWindow('detail.do?nno=${notice.nno }','상세보기',800,700);">
+						<tr style='font-size:0.85em;cursor:pointer;' onclick="OpenWindow('detail.do?nno=${notice.nno }&from=list','상세보기',800,700);">
 							<td>${notice.nno }</td>
 							<td id="boardTitle" style="text-align:left;max-width: 100px; overflow: hidden; 
 												white-space: nowrap; text-overflow: ellipsis;">
