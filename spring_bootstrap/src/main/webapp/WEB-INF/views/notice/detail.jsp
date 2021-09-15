@@ -2,9 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <body>
-
+	
+   <c:if test="${from eq 'remove' }" >
+    <script>
+   		alert("삭제되었습니다.");
+		window.opener.location.reload();
+		window.close();
+	</script>
+   </c:if>	
+	
   <!-- Content Wrapper. Contains page content -->
   <div  style="max-width:800px;min-width:420px;margin:0 auto;min-height:812px;">
    
@@ -97,7 +106,8 @@ function modify_go(){
 function remove_go(){
 	//alert("click remove btn");
 	var answer = confirm("정말 삭제하시겠습니까?");
-	if(answer)	formObj.attr('action','remove.do').submit();
+	if(answer)	formObj.attr({'action':'remove.do'
+							  'method':'post'}).submit();
 }
 
 </script>

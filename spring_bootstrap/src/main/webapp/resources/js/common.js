@@ -21,11 +21,14 @@ function CloseWindow(parentURL){
 	window.close();
 }
 
+
 // 목록 검색
 function list_go(page,url){
 	if(!url) url="list.do";
 	
 	var jobForm=$('#jobForm');
+	
+	if(!page) page=1;
 	
 	jobForm.find("[name='page']").val(page);
 	jobForm.find("[name='perPageNum']").val($('select[name="perPageNum"]').val());

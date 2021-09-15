@@ -3,17 +3,20 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
-<c:set var="pageMaker" value="${dataMap.pageMaker }" />
-<c:set var="cri" value="${dataMap.pageMaker.cri }" />
-<c:set var="noticeList" value="${dataMap.noticeList }" />
+<c:set var="cri" value="${pageMaker.cri }" />
 
 <head></head>
 
 <title>공지목록</title>
 
-<body>
+<body>	
+	<c:if test="${from eq 'regist'}" >
+		<script>
+    	alert("공지사항 등록이 성공했습니다.");
+    	window.opener.location.reload();	
+    	window.close();
+    	</script>
+    </c:if>
 	 <!-- Main content -->
 	<section class="content-header">
 	  	<div class="container-fluid">
@@ -118,6 +121,8 @@
     		return false;    		
     	});
     }
+    
+    
     </script>
     
 </body>
