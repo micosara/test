@@ -7,7 +7,7 @@
 {{#each .}}
 <div class="replyLi" >
 	<div class="user-block">
-		<img src="<%=request.getContextPath()%>/member/getPictureById.do/{{replyer}}" class="img-circle img-bordered-sm"/>
+		<img src="<%=request.getContextPath()%>/member/getPictureById/{{replyer}}" class="img-circle img-bordered-sm"/>
     </div>
 	
  	<div class="timeline-item" >
@@ -129,7 +129,7 @@ function replyRegist_go(){
 			"replytext":replytext	
 	}
 	$.ajax({
-		url:"/reply/regist.do",
+		url:"/replies",
 		type:"post",
 		data:JSON.stringify(data),	
 		contentType:'application/json',
@@ -221,15 +221,14 @@ function replyRemove_go(){
 
 /* page upload */
 window.onload=function(){
-	getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="+replyPage);
+	getPage("<%=request.getContextPath()%>/replies/${board.bno}/"+replyPage);
 	
 	$('ul.pagination').on('click','li a',function(event){
 		//alert("click page number");
 		// $(this) : event.currentTarget
 		if($(this).attr("href")) {
 			replyPage=$(this).attr("href");
-			getPage("<%=request.getContextPath()%>/reply/list.do?bno=${board.bno}&page="
-					+replyPage);
+			getPage("<%=request.getContextPath()%>/replies/${board.bno}/"+replyPage);
 		}
 		return false;
 	});
