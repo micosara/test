@@ -183,16 +183,17 @@ public class PdsController {
 	}
 	
 	@RequestMapping("/getFile")
-	@ResponseBody
 	public String getFile(int ano,Model model) throws Exception {
-				
+		
+		String url="downloadFile";
+		
 		AttachVO attach = service.getAttachByAno(ano);
 		
 
 		model.addAttribute("savedPath", attach.getUploadPath());
 		model.addAttribute("fileName", attach.getFileName());		
 	
-		return null;
+		return url;
 	}
 }
 
