@@ -50,9 +50,7 @@ public class MemberController {
 
 		Map<String, Object> dataMap = memberService.getMemberList(cri);
 		mnv.addAllObjects(dataMap);
-		mnv.setViewName(url);
-		
-		if(true) throw new SQLException();
+		mnv.setViewName(url);	
 		
 		return mnv;
 	}
