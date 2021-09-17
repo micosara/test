@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.josephoconnell.html.HTMLInputFilter;
 
 import kr.or.ddit.command.PageMaker;
 import kr.or.ddit.command.ReplyModifyCommand;
@@ -65,6 +66,9 @@ public class BoardReplyController {
 		ResponseEntity<String> entity=null;
 		
 		ReplyVO reply = replyReq.toReplyVO();
+		reply.setReplytext(HTMLInputFilter.htmlSpecialChars(reply.getReplytext()));
+		
+		
 		try {
 			service.registReply(reply);
 

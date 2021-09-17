@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -59,14 +59,17 @@ public class PdsController {
 	}
 
 	@RequestMapping(value = "/regist", method = RequestMethod.POST, produces = "text/plain;charset=utf-8")
-	public String regist(PdsRegistCommand registReq, RedirectAttributes rttr) throws Exception {
+	public String regist(PdsRegistCommand registReq, 
+						 HttpServletRequest request,
+						 RedirectAttributes rttr) throws Exception {
 		String url = "redirect:/pds/list.do";
 
 		PdsVO pds = registReq.toPdsVO();
 
 		List<AttachVO> attachList = GetAttachesAsMultipartFiles.save(registReq.getUploadFile(), fileUploadPath);
 
-		pds.setTitle(HTMLInputFilter.htmlSpecialChars(pds.getTitle()));
+		//pds.setTitle(HTMLInputFilter.htmlSpecialChars(pds.getTitle()));
+		pds.setTitle((String)request.getAttribute("XSStitle"));
 		pds.setAttachList(attachList);
 
 		service.regist(pds);
@@ -125,7 +128,9 @@ public class PdsController {
 	}
 
 	@RequestMapping("/modify")
-	public String modifyPOST(PdsModifyCommand modifyReq, RedirectAttributes rttr) throws Exception {
+	public String modifyPOST(PdsModifyCommand modifyReq, 
+							 HttpServletRequest request, 
+							 RedirectAttributes rttr) throws Exception {
 		String url = "redirect:/pds/detail.do";
 
 		// 파일 삭제
@@ -144,9 +149,10 @@ public class PdsController {
 		List<AttachVO> attachList = GetAttachesAsMultipartFiles.save(modifyReq.getUploadFile(), fileUploadPath);
 
 		// PdsVO settting
-		PdsVO pds = modifyReq.toPdsVO();
+		PdsVO pds = modifyReq.toPdsVO();		
 		pds.setAttachList(attachList);
-		pds.setTitle(HTMLInputFilter.htmlSpecialChars(pds.getTitle()));
+		//pds.setTitle(HTMLInputFilter.htmlSpecialChars(pds.getTitle()));
+		pds.setTitle((String)request.getAttribute("XSStitle"));
 
 		// DB 저장
 		service.modify(pds);

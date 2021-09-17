@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.josephoconnell.html.HTMLInputFilter;
-
 import kr.or.ddit.command.NoticeModifyCommand;
 import kr.or.ddit.command.NoticeRegistCommand;
 import kr.or.ddit.command.SearchCriteria;
@@ -47,12 +45,15 @@ public class NoticeController {
 	}
 	
 	@RequestMapping("/regist")
-	public String regist(NoticeRegistCommand regReq,RedirectAttributes rttr) throws Exception{
+	public String regist(NoticeRegistCommand regReq,
+						 HttpServletRequest request,
+						 RedirectAttributes rttr) throws Exception{
 		String url = "redirect:/notice/list";
 		
 		NoticeVO notice = regReq.toNoticeVO();
 		
-		notice.setTitle(HTMLInputFilter.htmlSpecialChars(notice.getTitle()));
+		//notice.setTitle(HTMLInputFilter.htmlSpecialChars(notice.getTitle()));
+		notice.setTitle((String)request.getAttribute("XSStitle"));
 		
 		noticeService.regist(notice);		
 		
@@ -98,11 +99,13 @@ public class NoticeController {
 	
 	@RequestMapping(value="/modify",method=RequestMethod.POST)
 	public String modifyPost(NoticeModifyCommand modifyReq,
+						     HttpServletRequest request,
 							 RedirectAttributes rttr)throws Exception{
 		String url = "redirect:/notice/detail.do";
 		
 		NoticeVO notice = modifyReq.toNoticeVO();		
-		notice.setTitle(HTMLInputFilter.htmlSpecialChars(notice.getTitle()));
+		//notice.setTitle(HTMLInputFilter.htmlSpecialChars(notice.getTitle()));
+		notice.setTitle((String)request.getAttribute("XSStitle"));
 		
 		noticeService.modify(notice);
 		
