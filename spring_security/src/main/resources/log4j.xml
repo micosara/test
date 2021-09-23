@@ -10,8 +10,16 @@
 		</layout>
 	</appender>
 	
+	
+	
 	<!-- Application Loggers -->
 	<logger name="com.spring.security">
+		<level value="info" />
+	</logger>
+	<logger name="com.spring.dao">	
+		<level value="info" />
+	</logger>
+	<logger name="com.spring.service">
 		<level value="info" />
 	</logger>
 	
